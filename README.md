@@ -47,7 +47,7 @@ This project is designed to facilitate income and expense management within your
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/princex2712/miscellaneous_expenses_personal.git
+   https://github.com/RanjitkumarChauhan/Expanses-Tracker.git
    ```
 
 2. Navigate into the cloned repository directory:
