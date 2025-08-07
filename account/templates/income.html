@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}
+Income
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="income_date">Date</label>
+                <input type="date" class="form-control border" name="date" id="income_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="income_amount">Income Amount</label>
+                <input type="number" class="form-control border" name="income_amount" id="income_amount"
+                       placeholder="30000/-" required>
+            </div>
+
+            <input type="submit" value="Add" class="btn btn-success">
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <h3 class="my-3">Income Data</h3>
+        <table class="table border" style="margin-top: 20px; color: #fff;">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Member Name</th>
+                <th scope="col">Income</th>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if get_income|length != 0 %}
+            {% for income in get_income %}
+            <tr>
+                <td>{{ income.user.first_name }} {{ income.user.last_name }}</td>
+                <td>{{ income.amount }}</td>
+                <td>{{ income.date }}</td>
+                <td>
+                    <a href="{% url 'update_income_view' id=income.id %}">
+                        <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                    </a>
+                    <a href="{% url 'delete_income_view' id=income.id %}">
+                        <i class="fa fa-trash-o fa-2x ml-2" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No Member Income</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-5">
+        <h3 class="my-3">Filters</h3>
+        <form action="{% url 'income_date_filter' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group p-3" style="background-color: #3c3c3c; border-radius: 7%;">
+                <label>Filter by:</label><br>
+                <input type="checkbox" id="date_chk_box" class="ui-checkbox" name="date_chk_box">
+                <label for="date_chk_box">Date</label><br>
+
+                {% if user.is_superuser %}
+                <input class="ui-checkbox" type="checkbox" id="member_chk_box" name="member_chk_box">
+                <label for="member_chk_box">Member</label><br><br>
+
+                <label for="member">Select member: </label>
+                <select class="form-control form-control-sm border" name="member" id="member">
+                    <option value="" selected disabled>Choose member</option>
+                    {% for member in members %}
+                    <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+
+                <label for="date">Here Records are From:</label><br>
+                <input type="date" name="startdate" id="startdate">
+                <label for="startdate">To:</label>
+                <input type="date" name="enddate" id="enddate">
+                <input type="submit" value="Filter" class="btn-success">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("startdate").value = "{{ start_date_of_month }}";
+    document.getElementById("enddate").value = "{{ current_date_of_month }}";
+</script>
+{% endblock %}

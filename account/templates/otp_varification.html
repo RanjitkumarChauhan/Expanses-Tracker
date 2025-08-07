@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Importing fonts from Google */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        /* Reseting */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #ecf0f3;
+        }
+
+        h4 {
+            color: #ffffff;
+        }
+
+        label {
+            color: #ffffff;
+        }
+
+        .wrapper {
+            max-width: 350px;
+            min-height: auto;
+            margin: 80px auto;
+            padding: 40px 30px 30px 30px;
+            background-color: #171717;
+            border-radius: 15px;
+            box-shadow: inset 1px 1px 1px #cbced1, inset 1px 1px 1px #fff;
+        }
+
+        .logo {
+            width: 80px;
+            margin: auto;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0px 0px 3px #5f5f5f,
+                0px 0px 0px 5px #ecf0f3,
+                8px 8px 15px #a7aaa7,
+                -8px -8px 15px #fff;
+        }
+
+        .wrapper .name {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 1.3px;
+            padding-left: 10px;
+            color: #555;
+        }
+
+        .wrapper .form-field input {
+            width: 100%;
+            display: block;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1.2rem;
+            color: #666;
+            padding: 10px 15px 10px 10px;
+            /* border: 1px solid red; */
+        }
+
+        .wrapper .form-field {
+            padding-left: 10px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: inset 1px 1px 1px #cbced1, inset 1px 1px 1px #fff;
+        }
+
+        .wrapper .form-field .fas {
+            color: #555;
+        }
+
+        .wrapper .btn {
+            box-shadow: none;
+            width: 100%;
+            height: 40px;
+            background-color: #03A9F4;
+            color: #fff;
+            border-radius: 25px;
+            letter-spacing: 1.3px;
+        }
+
+        .wrapper .btn:hover {
+            background-color: #039BE5;
+        }
+
+        .wrapper a {
+            text-decoration: none;
+            font-size: 0.8rem;
+            color: #03A9F4;
+        }
+
+        .wrapper a:hover {
+            color: #039BE5;
+        }
+
+        @media(max-width: 380px) {
+            .wrapper {
+                margin: 30px 20px;
+                padding: 40px 15px 15px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Section: Design Block -->
+    <section class="">
+        <!-- Jumbotron -->
+        <div class="px-4 py-2 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 0%)">
+            <div class="container">
+                <div class="row gx-lg-5 align-items-center">
+                    <div class="col-lg-12 mb-5 ">
+                        <div class="wrapper">
+                            <div class="logo">
+                                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#000000"
+                                    stroke="#000000" stroke-width="2.16">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                    </g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <defs>
+                                            <style>
+                                                .a {
+                                                    fill: none;
+                                                    stroke: #3c99fd;
+                                                    stroke-linecap: round;
+                                                    stroke-linejoin: round;
+                                                }
+                                            </style>
+                                        </defs>
+                                        <path class="a"
+                                            d="M25.5591,42.9452l9.9263-8.0881a9.0285,9.0285,0,0,0,3.3255-6.9993V9.7074a2.657,2.657,0,0,0-1.9753-2.568l-7.15-1.8977a22.1657,22.1657,0,0,0-11.3718,0l-7.15,1.8977a2.657,2.657,0,0,0-1.9753,2.568v18.15a9.0285,9.0285,0,0,0,3.3255,6.9993l9.9263,8.0881A2.4682,2.4682,0,0,0,25.5591,42.9452Z">
+                                        </path>
+                                        <line class="a" x1="15.0489" y1="14.7967" x2="32.9511" y2="14.7967"></line>
+                                        <line class="a" x1="15.0489" y1="20.7764" x2="24" y2="20.7764"></line>
+                                        <line class="a" x1="15.0489" y1="26.7561" x2="17.1305" y2="26.7561"></line>
+                                    </g>
+                                </svg>
+                            </div>
+                            <h4 class="text-center my-4">
+                                OTP VERIFICATION
+                            </h4>
+                            {% if messages %}
+
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <form action="{% url 'otp_varification_view'%}" method="post" class="p-3 mt-3">
+                                {% csrf_token %}
+                                <input type="hidden" name="email" value="{{email}}">
+                                <label for="">OTP</label>
+                                <div class="form-field d-flex align-items-center">
+                                    <input type="otp" name="otp" id="otp" placeholder="* * * *">
+                                </div>
+                                <label for="">Password</label>
+                                <div class="form-field d-flex align-items-center">
+                                    <span class="fas fa-key"></span>
+                                    <input type="password" name="password" id="pwd" placeholder="********">
+                                </div>
+                                <label for="">Confirm password</label>
+                                <div class="form-field d-flex align-items-center">
+                                    <span class="fas fa-key"></span>
+                                    <input type="password" name="confirm_password" id="pwd" placeholder="********">
+                                </div>
+                                <input class="btn mt-3" style="background-color: #3c99fd;" type="submit" value="verify">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Jumbotron -->
+    </section>
+    <!-- Section: Design Block -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+{% block content %}
+
+<div class="row mx-2 my-4 justify-content-between ">
+    <div class="col-md-3 p-1 justify-content-center mb-2">
+        <div class="text-center" style="background-color: #393939; border-radius: 9px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png" class="rounded-circle" alt="..."
+                 height="150" width="150">
+            <h4>{{request.session.first_name}} {{request.session.last_name}}</h4>
+            <hr>
+            <div class="text-left" id="personal-information">
+                <h6 class="text-center underline">Personal Information</h6>
+                <p class="m-0"><span class="font-weight-bold ">Email : </span>{{request.session.email}}</p>
+                <p class="m-0"><span class="font-weight-bold ">Mobile : </span>{{request.session.phone}}</p>
+            </div>
+            <div class="d-flex justify-content-center my-5">
+                <a href="{% url 'logout' %}" class="btn btn-danger" style="margin-bottom: 9px;">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 p-1">
+        <div class="text-left m-2">
+            Here are records from
+            <mark style="background-color: #222;">
+                <a tabindex="0" class="btn-md m-2" role="button" data-toggle="popover" data-trigger="focus"
+                   title="First Date of Month"
+                   data-content="And here's some amazing content. It's very engaging. Right?">{{start_date_of_month}}</a>
+            </mark>
+            To
+            <mark style="background-color: #222;">
+                <a tabindex="0" class="btn-md m-2" role="button" data-toggle="popover" data-trigger="focus"
+                   title="Current Date of Month"
+                   data-content="And here's some amazing content. It's very engaging. Right?">{{current_date_of_month}}</a>
+            </mark>
+            .
+        </div>
+        <div id="content" class="mr-4 p-2 p-md-2 pt-3">
+            <div class="row d-flex justify-content-around" style="margin: 10px;">
+
+                <div class="col-md-4 p-3">
+                    <div class="card text-center" style="background-color: #1a1a1a;">
+                        <div class="card">
+                            <div class="card2">
+                                <h5 class="card-title" style="color: #fff;text-decoration-line: underline;">Total Income
+                                </h5>
+                                <h6 class="card-subtitle mb-2" style="color:rgb(0, 205, 0);">
+                                    {{total_income}}/-
+                                </h6>
+                                <p class="card-text">In the current month, the total income amounted to
+                                    {{total_income}}/-.</p>
+                                <a href="{% url 'download_income_report' %}"><i class="fa fa-download"
+                                                                                aria-hidden="true"></i> Download
+                                    Reports</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                    <div class="card text-center" style="background-color: #1a1a1a;">
+                        <div class="card">
+                            <div class="card2">
+                                <h5 class="card-title" style="color: #fff;text-decoration-line: underline;">Total
+                                    Expenses</h5>
+                                <h6 class="card-subtitle mb-2" style="color: red;">{{total_expense}}/-</h6>
+                                <p class="card-text">In the current month, the total Expenses amounted to
+                                    {{total_expense}}/-.</p>
+                                <a href="{% url 'download_expense_report' %}"><i class="fa fa-download"
+                                                                                 aria-hidden="true"></i> Download
+                                    Reports</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                    <div class="card text-center" style="background-color: #1a1a1a;">
+                        <div class="card">
+                            <div class="card2">
+                                <h5 class="card-title " style="color: #fff; text-decoration-line: underline;">Remaining
+                                </h5>
+                                <h6 class="card-subtitle mb-2" style="color: rgb(48, 48, 255);">{{remaining_amount}}/-
+                                </h6>
+                                <p class="card-text">The remaining amount for this period stands at
+                                    {{remaining_amount}}/-.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                    {% if user.is_superuser %}
+
+                    <div class="card text-center" style="background-color: #1a1a1a;">
+                        <div class="card">
+                            <div class="card2">
+                                <h5 class="card-title" style="color: #fff; text-decoration-line: underline;">Budget</h5>
+                                <h6 class="card-subtitle mb-2" style="color: rgb(0, 205, 0);">
+                                    {{ budget_amount }}/-
+                                </h6>
+                                <p class="card-text">
+                                    In the current month, your defined budget is {{ budget_amount }}/-.
+                                </p>
+                                <p class="card-text">
+                                    Based on current income/expense, remaining budget is {{ remaining_budget }}/-.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}
+Members
+{% endblock %}
+{% block content %}
+{% if user.is_superuser %}
+<div class="row mx-2 my-4 justify-content-between">
+    <div class="col-md-3 p-1 justify-content-center">
+        <h3 style="color: #3c99fd;">Member Add</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            {% if field.name == 'is_active' %}
+            <div class="form-check" style="margin: 10px 0px; padding-left: 0px;">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" name="{{ field.name }}">
+                <label class="form-check-label" for="exampleCheck1">{{ field.label_tag }}</label>
+                {{ field.errors }}
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            <input type="submit" value="Add" class="btn btn-success">
+        </form>
+    </div>
+    <div class="col-md-9 p-5 justify-content-center row ">
+        <div class="col-12" style="background-color: #3c3c3c; border-radius: 10px; padding-top: 10px;">
+            <caption>Members Infomation</caption>
+            <table class="table table-hover table-responsive ">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Fullname</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members%}
+                    <tr>
+                        <th scope="row"><img
+                                src="https://img.freepik.com/premium-vector/man-profile-cartoon_18591-58482.jpg?w=2000"
+                                width="30">{{member.first_name}} {{member.last_name}}</th>
+                        <td>{{member.email}}</td>
+                        <td>{{member.phone}}</td>
+                        <td><a href="{% url 'update_member_view' id=member.id %}"
+                                class="fa fa-pencil-square-o fa-2x "></a>
+                            <a href="{% url 'delete_member_view' id=member.id %}" class="fa fa-trash-o fa-2x ml-2 "></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% else %}
+<script>window.location.replace("{% url 'dashboard_view' %}");</script>
+{% endif %}
+{% endblock %}

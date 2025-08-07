@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}Budget{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <!-- Budget Update Form -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Set Budget</h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="budget_amount">Budget Amount</label>
+                    <input type="number" class="form-control" name="budget_amount" id="budget_amount"
+                           placeholder="30000/-" {% if budget_amount %}value="{{ budget_amount }}" {% endif %} required>
+                </div>
+                <input type="submit" value="Add/Update" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart and Filters -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-md-7">
+            <h3>Budget Overview</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="budgetChart"></canvas>
+            </div>
+            <!-- Chart Type Selector -->
+            <div class="form-group mt-3">
+                <label for="chartType">Chart Type:</label>
+                <select id="chartType" class="form-control" style="width: 200px;">
+                    <option value="bar">Bar Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="col-md-5">
+            <h3 class="my-3">Filters</h3>
+            <form action="{% url 'budget-page' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group p-3" style="background-color: #3c3c3c; border-radius: 7%;">
+                    <label class="text-light"><strong>Filter by:</strong></label><br>
+
+                    <label for="startdate" class="text-light">From:</label>
+                    <input type="date" name="startdate" id="startdate"
+                           class="form-control form-control-sm border mb-2"
+                           value="{{ selected_startdate }}" required>
+
+                    <label for="enddate" class="text-light">To:</label>
+                    <input type="date" name="enddate" id="enddate"
+                           class="form-control form-control-sm border mb-2"
+                           value="{{ selected_enddate }}" required>
+
+                    {% if user.is_superuser %}
+                    <label for="member" class="text-light">Select Member:</label>
+                    <select class="form-control form-control-sm border mb-2" name="member" id="member">
+                        <option value="">All Members</option>
+                        {% for member in members %}
+                        {% if member.id|stringformat:"s" == selected_member|stringformat:"s" %}
+                        <option value="{{ member.id }}" selected>{{ member.first_name }} {{ member.last_name }}</option>
+                        {% else %}
+                        <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+
+                    <input type="submit" value="Apply Filters" class="btn btn-success btn-block mt-2">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('budgetChart').getContext('2d');
+        var chartType = 'bar'; // Default chart type
+        var budgetAmount = {{ budget_amount|default:0 }};
+        var totalIncome = {{ total_income }};
+        var totalExpenses = {{ total_expenses }};
+
+        // Chart data including budget
+        var chartData = {
+            labels: ['Income', 'Expenses', 'Budget'],
+            datasets: [{
+                label: 'Amount',
+                data: [totalIncome, totalExpenses, budgetAmount],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)', // Blue for Income
+                    'rgba(255, 99, 132, 0.5)', // Red for Expenses
+                    'rgba(75, 192, 192, 0.5)'  // Teal for Budget
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Chart options for bar chart
+        var chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Amount' } },
+                x: { title: { display: true, text: 'Category' } }
+            },
+            plugins: {
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: 'Income, Expenses, and Budget' }
+            }
+        };
+
+        // Initialize the chart
+        var budgetChart = new Chart(ctx, {
+            type: chartType,
+            data: chartData,
+            options: chartOptions
+        });
+
+        // Function to update chart type
+        function updateChartType() {
+            var selectedType = document.getElementById('chartType').value;
+            budgetChart.destroy(); // Destroy existing chart
+            budgetChart = new Chart(ctx, {
+                type: selectedType,
+                data: chartData,
+                options: selectedType === 'pie' ? {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        title: { display: true, text: 'Income, Expenses, and Budget' }
+                    }
+                } : chartOptions
+            });
+        }
+
+        // Event listener for chart type change
+        document.getElementById('chartType').addEventListener('change', updateChartType);
+    });
+</script>
+{% endblock %}

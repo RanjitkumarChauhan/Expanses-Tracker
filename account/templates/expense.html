@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}
+Expense
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md">
+        <form action="{% url 'expenses_view' %}" method="post">
+            {% csrf_token %}
+            <h3 class="my-3">Add Expenses</h3>
+            <div class="form-group">
+                <label for="category">Select Category: </label>
+                <select class="form-control form-control-sm border" name="category" id="category" required>
+                    <option value="" selected disabled>Select Category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="income_date">Date</label>
+                <input type="date" class="form-control border" name="date" id="income_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="income_amount">Expense Amount</label>
+                <input type="number" class="form-control border" name="income_amount" id="income_amount"
+                    placeholder="30000/-" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" name="description" id="description" placeholder="At hotel...">
+            </div>
+            <input type="submit" value="Add" class="btn btn-success">
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <table class="table border" style="margin-top: 20px;color: #fff;">
+            <thead class="thead-dark">
+                <h3 class="mt-5" style="color: #fff;">Expenses Data</h3>
+                <tr>
+                    <th scope="col">Member Name</th>
+                    <th scope="col">Expense</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if get_expenses|length != 0 %}
+                    {% for expenses in get_expenses %}
+                    <tr>
+                        <td>{{ expenses.user.first_name }} {{expenses.user.last_name }}</td>
+                        <td>{{ expenses.amount }}</td>
+                        <td>{{ expenses.date }}</td>
+                        <td>{{ expenses.category_id }}</td>
+                        <td>{{ expenses.description }}</td>
+                        <td>
+                            <a href="{% url 'update_expense_view' id=expenses.id %}">
+                                <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                            </a>
+                            <a href="{% url 'delete_expense_view' id=expenses.id %}">
+                                <i class="fa fa-trash-o fa-2x ml-2" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No Member Expense</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-5">
+        <h3 class="my-3">Filters</h3>
+        <form action="{% url 'expense_date_filter' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group p-3" style="background-color: #3c3c3c; border-radius: 7%;">
+                <label>Filter by:</label><br>
+                <input type="checkbox" id="date_chk_box" class="ui-checkbox" name="date_chk_box">
+                <label for="date_chk_box">Date</label><br>
+
+                <input type="checkbox" id="category_chk_box" class="ui-checkbox" name="category_chk_box">
+                <label for="category_chk_box">Category</label><br>
+
+                {% if user.is_superuser %}
+                <input class="ui-checkbox" type="checkbox" id="member_chk_box" name="member_chk_box">
+                <label for="member_chk_box">Member</label><br><br>
+
+                <label for="member">Select member: </label>
+                <select class="form-control form-control-sm border" name="member" id="member">
+                    <option value="" selected disabled>Choose member</option>
+                    {% for member in members %}
+                    <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                    {% endfor %}
+                </select><br>
+                {% endif %}
+
+                <label for="category">Select Category: </label>
+                <select class="form-control form-control-sm border" name="category" id="category">
+                    <option value="" selected disabled>Select Category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name|title }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="date">Here Records are From:</label><br>
+                <input type="date" name="startdate" id="startdate">
+                <label for="startdate">To:</label>
+                <input type="date" name="enddate" id="enddate">
+                <input type="submit" value="Filter" class="btn-success"><br>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("startdate").value = "{{ start_date_of_month }}";
+    document.getElementById("enddate").value = "{{ current_date_of_month }}";
+</script>
+{% endblock %}
