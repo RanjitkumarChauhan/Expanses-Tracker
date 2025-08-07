@@ -7,12 +7,12 @@
 >Email:
 
    ```sh
-ranjitkumarchauhan2009@gmail.com
+   chauhanranjeet284@gmail.com
    ```
 >Password:
 
    ```sh
-   1234
+   admin
    ```
 
 > Note: Please re-login if you encounter a forbidden error or CSRF token verification fail. This may occur the first time you use the application.
