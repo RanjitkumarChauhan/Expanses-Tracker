@@ -7,7 +7,8 @@
 >Email:
 
    ```sh
-ranjitkumarchauhan2009@gmail.com   ```
+ranjitkumarchauhan2009@gmail.com
+   ```
 >Password:
 
    ```sh
